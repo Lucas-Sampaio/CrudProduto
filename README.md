@@ -11,8 +11,8 @@ sql server utilizando o orm Ef Core, onion architecture, clean code, testes unit
 ![Alt text](/Assets/diagramaProjeto.png?raw=true "Fluxo")
 
 ### 🛠 Como usar
- 1. Baixe o projeto
- 2. rode o comando no powershell na pasta [docker](https://github.com/Lucas-Sampaio/CrudProduto/tree/master/Docker) -> ```docker-compose up --build -d```
+ 1. Tenha o docker instalado e baixe o projeto
+ 2. Execute o comando no powershell na pasta [docker](https://github.com/Lucas-Sampaio/CrudProduto/tree/master/Docker) -> ```docker-compose up --build -d```
  isso irá subir os serviços necessario pro projeto api e banco de dados.
  4. O projeto gera a documentação da api automatica pelo swagger e pode ser acessado pelo url http://localhost:5000/swagger/index.html
 
