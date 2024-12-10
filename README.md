@@ -10,6 +10,9 @@ sql server utilizando o orm Ef Core, onion architecture, clean code, testes unit
 #### Fluxo do projeto
 ![Alt text](/Assets/diagramaProjeto.png?raw=true "Fluxo")
 
+#### Swagger Endpoints
+![Alt text](/Assets/Endpoints.png?raw=true "Endpoints")
+
 ### 🛠 Como usar
  1. Tenha o docker instalado e baixe o projeto
  2. Execute o comando no powershell na pasta [docker](https://github.com/Lucas-Sampaio/CrudProduto/tree/master/Docker) -> ```docker-compose up --build -d```
