@@ -1,6 +1,6 @@
 # Crud Produto
 ## Descrição do Projeto
-<p align="center">🚀 O projeto trata-se de uma api que permite realizar gerenciamento de um produto, podendo criar, obter atualizar e apagar um produto</p>
+<p align="center">🚀 O projeto trata-se de uma api que permite realizar gerenciamento de um produto, podendo criar, obter, atualizar e apagar um produto</p>
 
 ### 🛠 Objetivo
 
