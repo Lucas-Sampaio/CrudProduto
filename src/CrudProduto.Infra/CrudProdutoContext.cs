@@ -29,7 +29,19 @@ public class CrudProdutoContext : DbContext, IUnitOfWork
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CrudProdutoContext).Assembly);
         base.OnModelCreating(modelBuilder);
     }
+    public void CriarBanco()
+    {
+        try
+        {
+            _ = Database.EnsureCreated();
+            Database.Migrate();
+        }
+        catch (Exception ex)
+        {
+            _ = ex;
+        }
 
+    }
     public async ValueTask<bool> Commit(CancellationToken ct) =>
          await base.SaveChangesAsync(ct) > 0;
 }

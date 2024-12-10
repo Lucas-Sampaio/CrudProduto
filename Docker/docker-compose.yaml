@@ -9,10 +9,14 @@ services:
     ports:
       - "1433:1433"
 
-  crudProdutoApi:
+  crud-produto-api:
     container_name: crudProduto-api
-    build: ../src
-    dockerfile: ./CrudProduto.Api/DockerFile 
+    build: 
+        context: ../src
+        dockerfile: ./CrudProduto.Api/Dockerfile 
     restart: always
+    ports:
+      - "5000:8080"
+      - "5001:8081"
     depends_on:  
        -  sqlserver  

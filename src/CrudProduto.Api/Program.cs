@@ -1,5 +1,6 @@
 using CrudProduto.Api.Configuration;
 using CrudProduto.Application.UseCases.ProdutoUseCases.AdicionarProduto;
+using CrudProduto.Infra;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using System.Reflection;
@@ -32,7 +33,20 @@ public static class Program
         app.UseAuthorization();
 
         app.MapControllers();
-
+        InicializarBanco(app.Services);
         app.Run();
+    }
+
+    //cria banco na inicializacao da aplicacao
+    private static async void InicializarBanco(IServiceProvider serviceProvider)
+    {
+        using IServiceScope serviceScope = serviceProvider.CreateScope();
+
+        IServiceProvider provider = serviceScope.ServiceProvider;
+
+        var crudProdutoContext = provider.GetRequiredService<CrudProdutoContext>();
+
+        //cria o banco e as tabelas
+        crudProdutoContext.CriarBanco();
     }
 }
