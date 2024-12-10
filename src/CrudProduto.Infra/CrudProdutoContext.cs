@@ -6,8 +6,12 @@ namespace CrudProduto.Infra;
 
 public class CrudProdutoContext : DbContext, IUnitOfWork
 {
-    public CrudProdutoContext(DbContextOptions<CrudProdutoContext> options) : base(options) { }
+    public CrudProdutoContext(DbContextOptions<CrudProdutoContext> options) : base(options)
+    {
+    }
+
     public DbSet<Produto> Produtos { get; set; }
+    public DbSet<Tag> Tags { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -21,12 +25,6 @@ public class CrudProdutoContext : DbContext, IUnitOfWork
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //seta as colunas string pra varchar(250)
-        var propriedades = modelBuilder.Model.GetEntityTypes().SelectMany(x => x.GetProperties().Where(y => y.ClrType == typeof(string)));
-        foreach (var property in propriedades)
-        {
-            property.SetColumnType("varchar(250)");
-        }
         // pega as configurações das entidades
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(CrudProdutoContext).Assembly);
         base.OnModelCreating(modelBuilder);

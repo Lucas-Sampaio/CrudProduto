@@ -1,5 +1,4 @@
 ﻿using CrudProduto.Application.Shared;
-using CrudProduto.Application.UseCases.ProdutoUseCases.AdicionarProduto;
 using CrudProduto.Domain.ProdutoAggregate;
 using FluentValidation;
 
@@ -28,8 +27,14 @@ public class AtualizarProdutoValidation : AbstractValidator<AtualizarProdutoInpu
         When(x => x.Produto is not null, () =>
         {
             RuleFor(x => x.Produto.Nome)
-           .MinimumLength(1).WithMessage("O {PropertyName} precisa ter pelo menos {MinLength} caracteres")
-           .MaximumLength(Produto.NomeMaximo).WithMessage("O {PropertyName} precisa ter no máximo {MaxLength} caracteres");
+              .NotNull().WithMessage("O {PropertyName} nao pode ser nulo")
+              .MinimumLength(1).WithMessage("O {PropertyName} precisa ter pelo menos {MinLength} caracteres")
+              .MaximumLength(Produto.NomeMaximo).WithMessage("O {PropertyName} precisa ter no máximo {MaxLength} caracteres");
+
+            RuleFor(x => x.Produto.Tag)
+               .NotNull().WithMessage("O {PropertyName} nao pode ser nulo")
+               .MinimumLength(1).WithMessage("O {PropertyName} precisa ter pelo menos {MinLength} caracteres")
+               .MaximumLength(Tag.DescricaoMaximo).WithMessage("O {PropertyName} precisa ter no máximo {MaxLength} caracteres");
 
             RuleFor(x => x.Produto.Descricao)
                 .MaximumLength(Produto.DescricaoMaximo).WithMessage("O {PropertyName} precisa ter no máximo {MaxLength} caracteres");

@@ -18,7 +18,8 @@ public class ObterProdutosHandler(IProdutoRepository produtoRepository) : IReque
                 Codigo = x.Codigo,
                 Descricao = x.Descricao,
                 Nome = x.Nome,
-                Valor = x.Valor
+                Valor = x.Valor,
+                Tag = x.Tag?.Descricao
             }),
         };
     }

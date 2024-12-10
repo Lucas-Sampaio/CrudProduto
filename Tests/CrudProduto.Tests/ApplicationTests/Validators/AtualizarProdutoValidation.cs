@@ -15,7 +15,8 @@ public class AtualizarProdutoValidation
             {
                 Descricao = "Teste 1",
                 Nome = "Teste 1",
-                Valor = 10
+                Valor = 10,
+                Tag = "teste"
             }
         };
 
@@ -44,7 +45,8 @@ public class AtualizarProdutoValidation
             {
                 Descricao = "Teste 1",
                 Nome = new string('a', Produto.NomeMaximo + 1),
-                Valor = 10
+                Valor = 10,
+                Tag = "teste"
             }
         };
 
@@ -53,6 +55,28 @@ public class AtualizarProdutoValidation
         Assert.False(result);
         Assert.NotEmpty(input.ValidationResult.Errors);
         Assert.Contains($"O Produto Nome precisa ter no máximo {Produto.NomeMaximo} caracteres", input.ValidationResult.Errors.Select(x => x.ErrorMessage));
+    }
+
+    [Fact]
+    public void ValidationResult_AtualizarProdutoInputNomeNulo_RetornaFalse()
+    {
+        var input = new AtualizarProdutoInput
+        {
+            Codigo = 1,
+            Produto = new AtualizarProdutoDto
+            {
+                Descricao = "Teste 1",
+                Nome = null,
+                Valor = 10,
+                Tag = "teste"
+            }
+        };
+
+        var result = input.EhValido();
+
+        Assert.False(result);
+        Assert.NotEmpty(input.ValidationResult.Errors);
+        Assert.Contains($"O Produto Nome nao pode ser nulo", input.ValidationResult.Errors.Select(x => x.ErrorMessage));
     }
 
     [Fact]
@@ -65,7 +89,8 @@ public class AtualizarProdutoValidation
             {
                 Descricao = "Teste 1",
                 Nome = "",
-                Valor = 10
+                Valor = 10,
+                Tag = "teste"
             }
         };
 
@@ -74,6 +99,72 @@ public class AtualizarProdutoValidation
         Assert.False(result);
         Assert.NotEmpty(input.ValidationResult.Errors);
         Assert.Contains($"O Produto Nome precisa ter pelo menos 1 caracteres", input.ValidationResult.Errors.Select(x => x.ErrorMessage));
+    }
+
+    [Fact]
+    public void ValidationResult_AtualizarProdutoInputTagMenorQueOPermitido_RetornaFalse()
+    {
+        var input = new AtualizarProdutoInput
+        {
+            Codigo = 1,
+            Produto = new AtualizarProdutoDto
+            {
+                Descricao = "Teste 1",
+                Nome = "teste",
+                Valor = 10,
+                Tag = ""
+            }
+        };
+
+        var result = input.EhValido();
+
+        Assert.False(result);
+        Assert.NotEmpty(input.ValidationResult.Errors);
+        Assert.Contains($"O Produto Tag precisa ter pelo menos 1 caracteres", input.ValidationResult.Errors.Select(x => x.ErrorMessage));
+    }
+
+    [Fact]
+    public void ValidationResult_AtualizarProdutoInputTagMaiorQueOPermitido_RetornaFalse()
+    {
+        var input = new AtualizarProdutoInput
+        {
+            Codigo = 1,
+            Produto = new AtualizarProdutoDto
+            {
+                Descricao = "Teste 1",
+                Nome = "Teste 1",
+                Valor = 10,
+                Tag = new string('a', Tag.DescricaoMaximo + 1)
+            }
+        };
+
+        var result = input.EhValido();
+
+        Assert.False(result);
+        Assert.NotEmpty(input.ValidationResult.Errors);
+        Assert.Contains($"O Produto Tag precisa ter no máximo {Produto.NomeMaximo} caracteres", input.ValidationResult.Errors.Select(x => x.ErrorMessage));
+    }
+
+    [Fact]
+    public void ValidationResult_AtualizarProdutoInputTagNulo_RetornaFalse()
+    {
+        var input = new AtualizarProdutoInput
+        {
+            Codigo = 1,
+            Produto = new AtualizarProdutoDto
+            {
+                Descricao = "Teste 1",
+                Nome = "teste 1",
+                Valor = 10,
+                Tag = null
+            }
+        };
+
+        var result = input.EhValido();
+
+        Assert.False(result);
+        Assert.NotEmpty(input.ValidationResult.Errors);
+        Assert.Contains($"O Produto Tag nao pode ser nulo", input.ValidationResult.Errors.Select(x => x.ErrorMessage));
     }
 
     [Fact]
@@ -110,7 +201,8 @@ public class AtualizarProdutoValidation
             {
                 Descricao = descricaoValida,
                 Nome = "teste",
-                Valor = 10
+                Valor = 10,
+                Tag = "teste"
             }
         };
 
@@ -132,7 +224,8 @@ public class AtualizarProdutoValidation
             {
                 Descricao = "Teste 1",
                 Nome = "",
-                Valor = valorInvalido
+                Valor = valorInvalido,
+                Tag = "teste"
             }
         };
 
@@ -153,7 +246,8 @@ public class AtualizarProdutoValidation
             {
                 Descricao = "Teste 1",
                 Nome = "Teste 1",
-                Valor = 10
+                Valor = 10,
+                Tag = "teste"
             }
         };
 

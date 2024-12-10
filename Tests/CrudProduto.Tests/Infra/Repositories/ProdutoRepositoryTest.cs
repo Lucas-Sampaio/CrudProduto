@@ -1,4 +1,5 @@
-﻿using CrudProduto.Tests.Infra.Fixtures;
+﻿using CrudProduto.Domain.ProdutoAggregate;
+using CrudProduto.Tests.Infra.Fixtures;
 using Microsoft.EntityFrameworkCore;
 
 namespace CrudProduto.Tests.Infra.Repositories;
@@ -79,7 +80,8 @@ public class ProdutoRepositoryTest(ProdutoRepositoryFixture produtoRepositoryFix
         var nomeAtt = "Teste atualizacao";
         var valorAtt = 20;
         var descricaoAtt = "Descricao atualizado";
-        produtoBase.Alterar(nomeAtt, valorAtt, descricaoAtt);
+        var categoriaAtt = new Tag("categoria atualizado");
+        produtoBase.Alterar(nomeAtt, valorAtt, descricaoAtt, categoriaAtt);
 
         //act
         repositorio.Atualizar(produtoBase);
@@ -93,6 +95,7 @@ public class ProdutoRepositoryTest(ProdutoRepositoryFixture produtoRepositoryFix
         Assert.Equal(nomeAtt, result.Nome);
         Assert.Equal(valorAtt, result.Valor);
         Assert.Equal(descricaoAtt, result.Descricao);
+        Assert.Equal(categoriaAtt.Descricao, result.Tag.Descricao);
     }
 
     [Fact]
@@ -135,6 +138,7 @@ public class ProdutoRepositoryTest(ProdutoRepositoryFixture produtoRepositoryFix
         Assert.Equal(produto.Nome, result.Nome);
         Assert.Equal(produto.Valor, result.Valor);
         Assert.Equal(produto.Descricao, result.Descricao);
+        Assert.Equal(produto.Tag.Descricao, result.Tag.Descricao);
     }
 
     [Fact]
@@ -160,5 +164,28 @@ public class ProdutoRepositoryTest(ProdutoRepositoryFixture produtoRepositoryFix
         Assert.Contains(codigo2, result.Select(x => x.Codigo));
         Assert.Contains(produto.Nome, result.Select(x => x.Nome));
         Assert.Contains(produto2.Nome, result.Select(x => x.Nome));
+    }
+
+    [Fact]
+    public async Task ObterPorTag_ProdutoValido_RetornaProdutoBase()
+    {
+        // Arrange
+        var codigo = 8;
+        var repositorio = _produtoRepositoryFixture.ObterProdutoRepository();
+        var produto = _produtoRepositoryFixture.GerarProdutoValido(codigo);
+        await repositorio.AdicionarAsync(produto, default);
+        await repositorio.UnitOfWork.Commit(default);
+
+        //act
+        var result = await repositorio.ObterPorTagAsync(produto.Tag.Descricao, default);
+        var produto8 = result.FirstOrDefault(x => x.Codigo == codigo);
+        //Assert
+        Assert.NotNull(result);
+        Assert.Contains(codigo, result.Select(x => x.Codigo));
+        Assert.Equal(codigo, produto8.Codigo);
+        Assert.Equal(produto.Nome, produto8.Nome);
+        Assert.Equal(produto.Valor, produto8.Valor);
+        Assert.Equal(produto.Descricao, produto8.Descricao);
+        Assert.Equal(produto.Tag.Descricao, produto8.Tag.Descricao);
     }
 }

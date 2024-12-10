@@ -10,23 +10,26 @@ public class Produto : Entity, IAggregateRoot
     protected Produto()
     { }
 
-    public Produto(int codigo, string nome, decimal valor, string? descricao = null)
+    public Produto(int codigo, string nome, decimal valor, Tag tag, string? descricao = null)
     {
         Codigo = codigo;
         Nome = nome;
         Valor = valor;
         Descricao = descricao;
+        Tag = tag;
     }
 
     public int Codigo { get; init; }
     public string Nome { get; private set; }
     public string? Descricao { get; private set; }
     public decimal Valor { get; private set; }
+    public Tag Tag { get; private set; }
 
-    public void Alterar(string nome, decimal valor, string descricao)
+    public void Alterar(string nome, decimal valor, string descricao, Tag categoria)
     {
         Nome = nome;
         Descricao = descricao;
         Valor = valor;
+        Tag = categoria;
     }
 }

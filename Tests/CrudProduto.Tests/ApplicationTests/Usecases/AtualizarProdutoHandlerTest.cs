@@ -18,8 +18,9 @@ public class AtualizarProdutoHandlerTest
     [Fact]
     public async Task Handler_ProdutoValido_AtualizaComSucesso()
     {
+        //arrange
         var request = ObterInputValido();
-        Produto produto = new(request.Codigo, "produto base", 10);
+        Produto produto = new(request.Codigo, "produto base", 10, new Tag("teste"));
         _produtoRepoMock
             .Setup(x =>
             x.ObterPorCodigoAsync(
@@ -32,8 +33,17 @@ public class AtualizarProdutoHandlerTest
             x.UnitOfWork.Commit(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
+        _produtoRepoMock
+           .Setup(x =>
+           x.ObterTagOuAdicionarAsync(
+               It.IsAny<string>(),
+               It.IsAny<CancellationToken>()))
+           .ReturnsAsync(produto.Tag);
+
+        //act
         var result = await _handler.Handle(request, default);
 
+        //assert
         Assert.NotNull(result);
         Assert.Empty(result.Erros);
 
@@ -54,6 +64,11 @@ public class AtualizarProdutoHandlerTest
                   )), Times.Once);
 
         _produtoRepoMock
+           .Verify(x =>
+           x.ObterTagOuAdicionarAsync(
+               It.Is<string>(x => x == request.Produto.Tag),
+               It.IsAny<CancellationToken>()), Times.Once);
+        _produtoRepoMock
             .Verify(x =>
             x.UnitOfWork.Commit(It.IsAny<CancellationToken>()), Times.Once);
     }
@@ -61,6 +76,7 @@ public class AtualizarProdutoHandlerTest
     [Fact]
     public async Task Handler_ProdutoNaoEncontrado_RetornaErro()
     {
+        //arrange
         var request = ObterInputValido();
         Produto produto = null;
         _produtoRepoMock
@@ -75,8 +91,17 @@ public class AtualizarProdutoHandlerTest
             x.UnitOfWork.Commit(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
+        _produtoRepoMock
+           .Setup(x =>
+           x.ObterTagOuAdicionarAsync(
+               It.IsAny<string>(),
+               It.IsAny<CancellationToken>()))
+           .ReturnsAsync(new Tag("teste"));
+
+        //act
         var result = await _handler.Handle(request, default);
 
+        //assert
         Assert.NotNull(result);
         Assert.NotEmpty(result.Erros);
         Assert.Contains("Nao existe um produto com esse codigo", result.Erros.Select(x => x.ErrorMessage));
@@ -93,6 +118,12 @@ public class AtualizarProdutoHandlerTest
              It.IsAny<Produto>()), Times.Never);
 
         _produtoRepoMock
+           .Verify(x =>
+           x.ObterTagOuAdicionarAsync(
+               It.IsAny<string>(),
+               It.IsAny<CancellationToken>()), Times.Never);
+
+        _produtoRepoMock
             .Verify(x =>
             x.UnitOfWork.Commit(It.IsAny<CancellationToken>()), Times.Never);
     }
@@ -100,8 +131,9 @@ public class AtualizarProdutoHandlerTest
     [Fact]
     public async Task Handler_RequestFalhaValidacao_RetornaErro()
     {
+        //arrange
         var request = new AtualizarProdutoInput();
-        Produto produto = new(1, "produto novo", 10); ;
+        Produto produto = new(1, "produto novo", 10, new Tag("teste")); ;
         _produtoRepoMock
             .Setup(x =>
             x.ObterPorCodigoAsync(
@@ -114,8 +146,17 @@ public class AtualizarProdutoHandlerTest
             x.UnitOfWork.Commit(It.IsAny<CancellationToken>()))
             .ReturnsAsync(true);
 
+        _produtoRepoMock
+           .Setup(x =>
+           x.ObterTagOuAdicionarAsync(
+               It.IsAny<string>(),
+               It.IsAny<CancellationToken>()))
+           .ReturnsAsync(new Tag("teste"));
+
+        //act
         var result = await _handler.Handle(request, default);
 
+        //asset
         Assert.NotNull(result);
         Assert.NotEmpty(result.Erros);
 
@@ -132,6 +173,12 @@ public class AtualizarProdutoHandlerTest
                 It.IsAny<CancellationToken>()), Times.Never);
 
         _produtoRepoMock
+           .Verify(x =>
+           x.ObterTagOuAdicionarAsync(
+               It.IsAny<string>(),
+               It.IsAny<CancellationToken>()), Times.Never);
+
+        _produtoRepoMock
             .Verify(x =>
             x.UnitOfWork.Commit(It.IsAny<CancellationToken>()), Times.Never);
     }
@@ -145,7 +192,8 @@ public class AtualizarProdutoHandlerTest
             {
                 Descricao = "Teste 1",
                 Nome = "Teste 1",
-                Valor = 10
+                Valor = 10,
+                Tag = "teste"
             }
         };
     }

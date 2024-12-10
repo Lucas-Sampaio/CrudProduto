@@ -11,6 +11,19 @@ namespace CrudProduto.Infra.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "Tag",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Descricao = table.Column<string>(type: "varchar(250)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Tag", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Produto",
                 columns: table => new
                 {
@@ -19,11 +32,18 @@ namespace CrudProduto.Infra.Migrations
                     Codigo = table.Column<int>(type: "int", nullable: false),
                     Nome = table.Column<string>(type: "varchar(250)", nullable: false),
                     Descricao = table.Column<string>(type: "varchar(500)", nullable: true),
-                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    Valor = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TagId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Produto", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Produto_Tag_TagId",
+                        column: x => x.TagId,
+                        principalTable: "Tag",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -31,6 +51,16 @@ namespace CrudProduto.Infra.Migrations
                 table: "Produto",
                 column: "Codigo",
                 unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Produto_TagId",
+                table: "Produto",
+                column: "TagId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Tag_Descricao",
+                table: "Tag",
+                column: "Descricao");
         }
 
         /// <inheritdoc />
@@ -38,6 +68,9 @@ namespace CrudProduto.Infra.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Produto");
+
+            migrationBuilder.DropTable(
+                name: "Tag");
         }
     }
 }

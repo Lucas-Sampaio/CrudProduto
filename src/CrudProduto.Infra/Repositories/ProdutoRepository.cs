@@ -19,19 +19,35 @@ public class ProdutoRepository : IProdutoRepository
         _context.Produtos.Update(produto);
 
     public async ValueTask<Produto?> ObterPorCodigoAsync(int codigo, CancellationToken ct) =>
-     await _context.Produtos.FirstOrDefaultAsync(x => x.Codigo == codigo, ct);
+     await _context.Produtos.Include(x => x.Tag).FirstOrDefaultAsync(x => x.Codigo == codigo, ct);
 
-    public ValueTask<List<Produto>> ObterPorTagAsync(string tag, CancellationToken ct)
-    {
-        throw new NotImplementedException();
-    }
+    public async ValueTask<List<Produto>> ObterPorTagAsync(string tag, CancellationToken ct) =>
+         await _context.Produtos
+            .Include(x => x.Tag)
+            .Where(x => x.Tag.Descricao == tag)
+            .AsNoTrackingWithIdentityResolution()
+            .ToListAsync(ct);
 
     public async ValueTask<List<Produto>> ObterTodosAsync(CancellationToken ct) =>
-        await _context.Produtos.AsNoTrackingWithIdentityResolution().ToListAsync(ct);
+        await _context.Produtos
+        .Include(x => x.Tag)
+        .AsNoTrackingWithIdentityResolution()
+        .ToListAsync(ct);
 
     public void Remover(Produto produto)
     {
         if (produto is not null)
             _context.Produtos.Remove(produto);
+    }
+
+    public async ValueTask<Tag> ObterTagOuAdicionarAsync(string tag, CancellationToken ct)
+    {
+        var tagEntity = await _context.Tags.FirstOrDefaultAsync(x => x.Descricao == tag, ct);
+        if (tagEntity is null)
+        {
+            tagEntity = new Tag(tag);
+            await _context.Tags.AddAsync(tagEntity, ct);
+        }
+        return tagEntity;
     }
 }

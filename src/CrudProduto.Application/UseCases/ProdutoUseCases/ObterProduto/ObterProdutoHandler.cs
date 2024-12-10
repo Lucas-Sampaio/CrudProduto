@@ -23,6 +23,6 @@ public class ObterProdutoHandler(IProdutoRepository produtoRepository) : IReques
             return outputModel;
         }
 
-        return new ObterProdutoOutput(produto.Codigo, produto.Nome, produto.Valor, produto.Descricao);
+        return new ObterProdutoOutput(produto.Codigo, produto.Nome, produto.Valor, produto.Tag?.Descricao, produto.Descricao);
     }
 }

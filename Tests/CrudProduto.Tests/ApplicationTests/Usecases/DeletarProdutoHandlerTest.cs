@@ -23,7 +23,7 @@ public class DeletarProdutoHandlerTest
         var valor = 10;
         var descricao = "";
         var request = new DeletarProdutoInput { Codigo = codigo };
-        Produto produto = new(codigo, nome, valor, descricao);
+        Produto produto = new(codigo, nome, valor, new Tag("teste"), descricao);
 
         _produtoRepoMock
             .Setup(x =>
@@ -53,7 +53,7 @@ public class DeletarProdutoHandlerTest
         var valor = 10;
         var descricao = "";
         var request = new DeletarProdutoInput { Codigo = codigo };
-        Produto produto = new(codigo, nome, valor, descricao);
+        Produto produto = new(codigo, nome, valor, new Tag("teste"), descricao);
         _produtoRepoMock
             .Setup(x =>
             x.ObterPorCodigoAsync(

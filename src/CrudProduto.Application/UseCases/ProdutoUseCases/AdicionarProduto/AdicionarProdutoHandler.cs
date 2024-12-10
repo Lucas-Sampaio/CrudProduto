@@ -16,6 +16,7 @@ public class AdicionarProdutoHandler(IProdutoRepository produtoRepository) : IRe
             outputModel.AdicionarErros(request.ValidationResult.Errors);
             return outputModel;
         }
+
         var produto = await _produtoRepository.ObterPorCodigoAsync(produtoDto.Codigo, cancellationToken);
         if (produto is not null)
         {
@@ -23,10 +24,12 @@ public class AdicionarProdutoHandler(IProdutoRepository produtoRepository) : IRe
             return outputModel;
         }
 
-        produto = new Produto(produtoDto.Codigo, produtoDto.Nome, produtoDto.Valor, produtoDto.Descricao);
+        var tag = await _produtoRepository.ObterTagOuAdicionarAsync(request.Produto.Tag, cancellationToken);
+
+        produto = new Produto(produtoDto.Codigo, produtoDto.Nome, produtoDto.Valor, tag, produtoDto.Descricao);
         await _produtoRepository.AdicionarAsync(produto, cancellationToken);
         await _produtoRepository.UnitOfWork.Commit(cancellationToken);
 
-        return new AdicionarProdutoOutput(produto.Codigo, produto.Nome, produto.Valor, produto.Descricao);
+        return new AdicionarProdutoOutput(produto.Codigo, produto.Nome, produto.Valor, produto.Tag.Descricao, produto.Descricao);
     }
 }

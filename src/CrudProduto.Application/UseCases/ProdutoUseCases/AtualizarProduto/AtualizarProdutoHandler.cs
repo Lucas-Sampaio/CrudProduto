@@ -23,7 +23,9 @@ public class AtualizarProdutoHandler(IProdutoRepository produtoRepository) : IRe
             return outputModel;
         }
 
-        produto.Alterar(request.Produto.Nome, request.Produto.Valor, request.Produto.Descricao);
+        var tag = await _produtoRepository.ObterTagOuAdicionarAsync(request.Produto.Tag, cancellationToken);
+
+        produto.Alterar(request.Produto.Nome, request.Produto.Valor, request.Produto.Descricao, tag);
 
         _produtoRepository.Atualizar(produto);
         await _produtoRepository.UnitOfWork.Commit(cancellationToken);

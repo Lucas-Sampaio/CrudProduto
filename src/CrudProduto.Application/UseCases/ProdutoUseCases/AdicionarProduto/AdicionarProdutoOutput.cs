@@ -8,7 +8,7 @@ public class AdicionarProdutoOutput : OutputModel
     {
     }
 
-    public AdicionarProdutoOutput(int codigo, string nome, decimal valor, string? descricao)
+    public AdicionarProdutoOutput(int codigo, string nome, decimal valor, string tag, string? descricao)
     {
         Produto = new ProdutoResponse
         {
@@ -16,9 +16,9 @@ public class AdicionarProdutoOutput : OutputModel
             Nome = nome,
             Descricao = descricao,
             Valor = valor,
+            Tag = tag
         };
     }
 
     public ProdutoResponse Produto { get; set; }
 }
-

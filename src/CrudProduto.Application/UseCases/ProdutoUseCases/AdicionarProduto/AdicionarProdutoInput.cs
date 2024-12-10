@@ -25,11 +25,18 @@ public class AdicionarProdutoValidation : AbstractValidator<AdicionarProdutoInpu
            .GreaterThanOrEqualTo(0).WithMessage("{PropertyName} tem que ser maior ou igual a {ComparisonValue}");
 
             RuleFor(x => x.Produto.Nome)
+           .NotNull().WithMessage("O {PropertyName} nao pode ser nulo")
            .MinimumLength(1).WithMessage("O {PropertyName} precisa ter pelo menos {MinLength} caracteres")
            .MaximumLength(Produto.NomeMaximo).WithMessage("O {PropertyName} precisa ter no máximo {MaxLength} caracteres");
 
+            RuleFor(x => x.Produto.Tag)
+           .NotNull().WithMessage("O {PropertyName} nao pode ser nulo")
+           .MinimumLength(1).WithMessage("O {PropertyName} precisa ter pelo menos {MinLength} caracteres")
+           .MaximumLength(Tag.DescricaoMaximo).WithMessage("O {PropertyName} precisa ter no máximo {MaxLength} caracteres");
+
             RuleFor(x => x.Produto.Descricao)
                 .MaximumLength(Produto.DescricaoMaximo).WithMessage("O {PropertyName} precisa ter no máximo {MaxLength} caracteres");
+
 
             RuleFor(x => x.Produto.Valor)
                 .GreaterThan(0)

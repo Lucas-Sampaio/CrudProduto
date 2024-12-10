@@ -23,7 +23,7 @@ public class ObterProdutoHandlerTest
         var valor = 10;
         var descricao = "";
         var request = new ObterProdutoInput { Codigo = codigo };
-        Produto produto = new(codigo, nome, valor, descricao);
+        Produto produto = new(codigo, nome, valor, new Tag("teste"), descricao);
         _produtoRepoMock
             .Setup(x =>
             x.ObterPorCodigoAsync(
@@ -40,6 +40,7 @@ public class ObterProdutoHandlerTest
         Assert.Equal(nome, result.Produto.Nome);
         Assert.Equal(valor, result.Produto.Valor);
         Assert.Equal(codigo, result.Produto.Codigo);
+        Assert.Equal(produto.Tag.Descricao, result.Produto.Tag);
 
         _produtoRepoMock
            .Verify(x =>
@@ -56,7 +57,7 @@ public class ObterProdutoHandlerTest
         var valor = 10;
         var descricao = "";
         var request = new ObterProdutoInput { Codigo = codigo };
-        Produto produto = new(codigo, nome, valor, descricao);
+        Produto produto = new(codigo, nome, valor, new Tag("teste"), descricao);
         _produtoRepoMock
             .Setup(x =>
             x.ObterPorCodigoAsync(

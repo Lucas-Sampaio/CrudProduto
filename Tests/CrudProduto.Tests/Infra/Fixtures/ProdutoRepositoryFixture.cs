@@ -23,8 +23,8 @@ public class ProdutoRepositoryFixture
         return new ProdutoRepository(context);
     }
 
-    public Produto GerarProdutoValido(int codigo, string nome = "teste 1", decimal valor = 10, string descricao = "")
+    public Produto GerarProdutoValido(int codigo, string nome = "teste 1", decimal valor = 10, string descricao = "", string tag = "categoria teste")
     {
-        return new Produto(codigo, nome, valor, descricao);
+        return new Produto(codigo, nome, valor, new Tag(tag), descricao);
     }
 }

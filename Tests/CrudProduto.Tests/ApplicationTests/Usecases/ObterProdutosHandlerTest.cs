@@ -22,15 +22,15 @@ public class ObterProdutosHandlerTest
         var nome1 = "teste";
         var valor1 = 10;
         var descricao1 = "";
-
-        Produto produto1 = new(codigo1, nome1, valor1, descricao1);
+        var categoria1 = new Tag("categoria 1");
+        Produto produto1 = new(codigo1, nome1, valor1, categoria1, descricao1);
 
         var codigo2 = 2;
         var nome2 = "teste 2";
         var valor2 = 20;
         var descricao2 = "desc 2";
-
-        Produto produto2 = new(codigo2, nome2, valor2, descricao2);
+        var categoria2 = new Tag("categoria 2");
+        Produto produto2 = new(codigo2, nome2, valor2, categoria2, descricao2);
         var produtos = new List<Produto>(2) { produto1, produto2 };
         _produtoRepoMock
             .Setup(x =>
@@ -49,6 +49,7 @@ public class ObterProdutosHandlerTest
             Assert.Equal(nome1, p1.Nome);
             Assert.Equal(valor1, p1.Valor);
             Assert.Equal(codigo1, p1.Codigo);
+            Assert.Equal(categoria1.Descricao, p1.Tag);
         },
         p2 =>
         {
@@ -56,6 +57,7 @@ public class ObterProdutosHandlerTest
             Assert.Equal(nome2, p2.Nome);
             Assert.Equal(valor2, p2.Valor);
             Assert.Equal(codigo2, p2.Codigo);
+            Assert.Equal(categoria2.Descricao, p2.Tag);
         }
         );
 

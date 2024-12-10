@@ -39,6 +39,9 @@ namespace CrudProduto.Infra.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(250)");
 
+                    b.Property<int>("TagId")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(18,2)");
 
@@ -47,7 +50,44 @@ namespace CrudProduto.Infra.Migrations
                     b.HasIndex("Codigo")
                         .IsUnique();
 
+                    b.HasIndex("TagId");
+
                     b.ToTable("Produto", (string)null);
+                });
+
+            modelBuilder.Entity("CrudProduto.Domain.ProdutoAggregate.Tag", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("varchar(250)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Descricao");
+
+                    b.ToTable("Tag", (string)null);
+                });
+
+            modelBuilder.Entity("CrudProduto.Domain.ProdutoAggregate.Produto", b =>
+                {
+                    b.HasOne("CrudProduto.Domain.ProdutoAggregate.Tag", "Tag")
+                        .WithMany("Produtos")
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Tag");
+                });
+
+            modelBuilder.Entity("CrudProduto.Domain.ProdutoAggregate.Tag", b =>
+                {
+                    b.Navigation("Produtos");
                 });
 #pragma warning restore 612, 618
         }

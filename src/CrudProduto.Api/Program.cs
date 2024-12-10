@@ -1,4 +1,3 @@
-
 using CrudProduto.Api.Configuration;
 using CrudProduto.Application.UseCases.ProdutoUseCases.AdicionarProduto;
 using FluentValidation;
@@ -23,19 +22,14 @@ public static class Program
         builder.Services.AddSwaggerConfiguration();
         builder.Services.RegisterServices(builder.Configuration);
         builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-        
+
         var app = builder.Build();
 
-        // Configure the HTTP request pipeline.
-        if (app.Environment.IsDevelopment())
-        {
-            app.UseSwaggerConfiguration();
-        }
+        app.UseSwaggerConfiguration();
 
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-
 
         app.MapControllers();
 
