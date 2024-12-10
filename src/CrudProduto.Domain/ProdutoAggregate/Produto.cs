@@ -13,9 +13,9 @@ public class Produto : Entity, IAggregateRoot
     public Produto(int codigo, string nome, decimal valor, Tag tag, string? descricao = null)
     {
         Codigo = codigo;
-        Nome = nome;
+        Nome = nome?.Trim();
         Valor = valor;
-        Descricao = descricao;
+        Descricao = descricao?.Trim();
         Tag = tag;
     }
 
@@ -27,8 +27,8 @@ public class Produto : Entity, IAggregateRoot
 
     public void Alterar(string nome, decimal valor, string descricao, Tag categoria)
     {
-        Nome = nome;
-        Descricao = descricao;
+        Nome = nome.Trim();
+        Descricao = descricao?.Trim();
         Valor = valor;
         Tag = categoria;
     }

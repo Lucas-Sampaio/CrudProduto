@@ -4,6 +4,7 @@ using CrudProduto.Application.UseCases.ProdutoUseCases.AdicionarProduto;
 using CrudProduto.Application.UseCases.ProdutoUseCases.AtualizarProduto;
 using CrudProduto.Application.UseCases.ProdutoUseCases.DeletarProduto;
 using CrudProduto.Application.UseCases.ProdutoUseCases.ObterProduto;
+using CrudProduto.Application.UseCases.ProdutoUseCases.ObterProdutoPorTag;
 using CrudProduto.Application.UseCases.ProdutoUseCases.ObterProdutos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -260,6 +261,62 @@ public class ProdutoControllerTest
         Assert.IsType<BadRequestObjectResult>(result);
         _mediatorMock.Verify(x => x.Send(
            It.IsAny<IRequest<AtualizarProdutoOutput>>(),
+           It.IsAny<CancellationToken>()), Times.Once);
+    }
+
+    [Fact]
+    public async Task GetTag_RequestValida_RetornaOk()
+    {
+        //arrange
+        var tag = "tag 1";
+
+        var response = new ObterProdutosPorTagOutput()
+        {
+            Produtos =
+            [
+                new()
+                {
+                    Codigo = 1,
+                    Valor = 10,
+                    Nome = "teste"
+                }
+            ]
+        };
+
+        _mediatorMock.Setup(x => x.Send(
+            It.IsAny<IRequest<ObterProdutosPorTagOutput>>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(response);
+        //act
+        var result = await _produtoController.Get(tag, default);
+
+        //assert
+        Assert.IsType<OkObjectResult>(result);
+        _mediatorMock.Verify(x => x.Send(
+           It.IsAny<IRequest<ObterProdutosPorTagOutput>>(),
+           It.IsAny<CancellationToken>()), Times.Once);
+        Assert.NotNull(((OkObjectResult)result).Value);
+    }
+
+    [Fact]
+    public async Task GetTag_RequestComErro_RetornaBadRequest()
+    {
+        //arrange
+        var tag = "tag";
+        var response = new ObterProdutosPorTagOutput();
+        response.AdicionarErro("Erro teste");
+
+        _mediatorMock.Setup(x => x.Send(
+            It.IsAny<IRequest<ObterProdutosPorTagOutput>>(),
+            It.IsAny<CancellationToken>()))
+            .ReturnsAsync(response);
+        //act
+        var result = await _produtoController.Get(tag, default);
+
+        //assert
+        Assert.IsType<BadRequestObjectResult>(result);
+        _mediatorMock.Verify(x => x.Send(
+           It.IsAny<IRequest<ObterProdutosPorTagOutput>>(),
            It.IsAny<CancellationToken>()), Times.Once);
     }
 }

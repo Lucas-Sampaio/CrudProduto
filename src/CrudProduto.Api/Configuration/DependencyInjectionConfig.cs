@@ -2,6 +2,7 @@
 using CrudProduto.Application.UseCases.ProdutoUseCases.AtualizarProduto;
 using CrudProduto.Application.UseCases.ProdutoUseCases.DeletarProduto;
 using CrudProduto.Application.UseCases.ProdutoUseCases.ObterProduto;
+using CrudProduto.Application.UseCases.ProdutoUseCases.ObterProdutoPorTag;
 using CrudProduto.Application.UseCases.ProdutoUseCases.ObterProdutos;
 using CrudProduto.Domain.ProdutoAggregate;
 using CrudProduto.Infra;
@@ -27,6 +28,7 @@ public static class DependencyInjectionConfig
         services.AddScoped<IRequestHandler<AdicionarProdutoInput, AdicionarProdutoOutput>, AdicionarProdutoHandler>();
         services.AddScoped<IRequestHandler<ObterProdutoInput, ObterProdutoOutput>, ObterProdutoHandler>();
         services.AddScoped<IRequestHandler<ObterProdutosInput, ObterProdutosOutput>, ObterProdutosHandler>();
+        services.AddScoped<IRequestHandler<ObterProdutosPorTagInput, ObterProdutosPorTagOutput>, ObterProdutosPorTagHandler>();
         services.AddScoped<IRequestHandler<DeletarProdutoInput, DeletarProdutoOutput>, DeletarProdutoHandler>();
         services.AddScoped<IRequestHandler<AtualizarProdutoInput, AtualizarProdutoOutput>, AtualizarProdutoHandler>();
 

@@ -2,7 +2,7 @@
 
 namespace CrudProduto.Tests.ApplicationTests.Validators;
 
-public class DeletarProdutoValidation
+public class DeletarProdutoValidationTests
 {
     [Fact]
     public void EhValido_DeletarProdutoInputValido_RetornaTrue()

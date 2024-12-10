@@ -3,6 +3,7 @@ using CrudProduto.Application.UseCases.ProdutoUseCases.AdicionarProduto;
 using CrudProduto.Application.UseCases.ProdutoUseCases.AtualizarProduto;
 using CrudProduto.Application.UseCases.ProdutoUseCases.DeletarProduto;
 using CrudProduto.Application.UseCases.ProdutoUseCases.ObterProduto;
+using CrudProduto.Application.UseCases.ProdutoUseCases.ObterProdutoPorTag;
 using CrudProduto.Application.UseCases.ProdutoUseCases.ObterProdutos;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -42,7 +43,7 @@ public class ProdutoController(IMediator mediator) : MainController(mediator)
     /// <param name="ct"></param>
     /// <returns>retorna uma lista de produtos</returns>
     [HttpGet("")]
-    [ProducesResponseType(typeof(ProdutoResponse), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(List<ProdutoResponse>), (int)HttpStatusCode.OK)]
     public async Task<IActionResult> Get(CancellationToken ct)
     {
         var input = new ObterProdutosInput();
@@ -51,7 +52,7 @@ public class ProdutoController(IMediator mediator) : MainController(mediator)
 
         return Ok(response.Produtos);
     }
-     
+
     /// <summary>
     /// Obtem um produto por codigo
     /// </summary>
@@ -76,6 +77,29 @@ public class ProdutoController(IMediator mediator) : MainController(mediator)
     }
 
     /// <summary>
+    /// Obtem produtos por tag
+    /// </summary>
+    /// <param name="tag">tag do produto</param>
+    /// <param name="ct"></param>
+    /// <returns>retorna uma lista de produtos</returns>
+    [HttpGet("tag/{tag}")]
+    [ProducesResponseType(typeof(List<ProdutoResponse>), (int)HttpStatusCode.OK)]
+    [ProducesResponseType(typeof(ValidationProblemDetails), (int)HttpStatusCode.BadRequest)]
+    public async Task<IActionResult> Get(string tag, CancellationToken ct)
+    {
+        var input = new ObterProdutosPorTagInput
+        {
+            Tag = tag,
+        };
+
+        var response = await _mediator.Send(input, ct);
+        if (response.Erros.Count > 0)
+            return BadRequest(ObterErroResponse(response.Erros));
+
+        return Ok(response.Produtos);
+    }
+
+    /// <summary>
     /// Obtem um produto por codigo
     /// </summary>
     /// <param name="codigo">codigo do produto</param>
@@ -97,6 +121,7 @@ public class ProdutoController(IMediator mediator) : MainController(mediator)
 
         return NoContent();
     }
+
     /// <summary>
     /// Atualiza informacoes de um produto
     /// </summary>

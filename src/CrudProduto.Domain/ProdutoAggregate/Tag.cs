@@ -11,7 +11,7 @@ public class Tag : Entity
 
     public Tag(string descricao)
     {
-        Descricao = descricao;
+        Descricao = descricao.Trim();
     }
 
     public string Descricao { get; set; }

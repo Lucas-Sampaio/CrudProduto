@@ -2,7 +2,7 @@
 
 namespace CrudProduto.Tests.ApplicationTests.Validators;
 
-public class ObterProdutoValidation
+public class ObterProdutoValidationTests
 {
     [Fact]
     public void EhValido_ObterProdutoInputValido_RetornaTrue()

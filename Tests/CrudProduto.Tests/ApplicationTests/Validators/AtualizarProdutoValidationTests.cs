@@ -3,7 +3,7 @@ using CrudProduto.Domain.ProdutoAggregate;
 
 namespace CrudProduto.Tests.ApplicationTests.Validators;
 
-public class AtualizarProdutoValidation
+public class AtualizarProdutoValidationTests
 {
     [Fact]
     public void EhValido_AtualizarProdutoInputValido_RetornaTrue()
