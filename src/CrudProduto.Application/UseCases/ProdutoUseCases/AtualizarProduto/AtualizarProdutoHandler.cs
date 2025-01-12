@@ -30,6 +30,6 @@ public class AtualizarProdutoHandler(IProdutoRepository produtoRepository) : IRe
         _produtoRepository.Atualizar(produto);
         await _produtoRepository.UnitOfWork.Commit(cancellationToken);
 
-        return new AtualizarProdutoOutput();
+        return outputModel;
     }
 }

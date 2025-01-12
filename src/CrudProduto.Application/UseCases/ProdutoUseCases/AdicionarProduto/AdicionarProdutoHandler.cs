@@ -1,4 +1,5 @@
-﻿using CrudProduto.Domain.ProdutoAggregate;
+﻿using CrudProduto.Application.Shared;
+using CrudProduto.Domain.ProdutoAggregate;
 using MediatR;
 
 namespace CrudProduto.Application.UseCases.ProdutoUseCases.AdicionarProduto;
@@ -30,6 +31,14 @@ public class AdicionarProdutoHandler(IProdutoRepository produtoRepository) : IRe
         await _produtoRepository.AdicionarAsync(produto, cancellationToken);
         await _produtoRepository.UnitOfWork.Commit(cancellationToken);
 
-        return new AdicionarProdutoOutput(produto.Codigo, produto.Nome, produto.Valor, produto.Tag.Descricao, produto.Descricao);
+        outputModel.Produto = new ProdutoResponse
+        {
+            Codigo = produto.Codigo,
+            Nome = produto.Nome,
+            Descricao = produto.Descricao,
+            Valor = produto.Valor,
+            Tag = produto.Tag.Descricao
+        };
+        return outputModel;
     }
 }

@@ -22,7 +22,7 @@ public class ObterProdutoHandler(IProdutoRepository produtoRepository) : IReques
             outputModel.AdicionarErro("Nao existe um produto com esse codigo");
             return outputModel;
         }
-
-        return new ObterProdutoOutput(produto.Codigo, produto.Nome, produto.Valor, produto.Tag?.Descricao, produto.Descricao);
+        outputModel.Produto = new Shared.ProdutoResponse(produto.Codigo, produto.Nome, produto.Valor, produto.Tag?.Descricao, produto.Descricao);
+        return outputModel;
     }
 }

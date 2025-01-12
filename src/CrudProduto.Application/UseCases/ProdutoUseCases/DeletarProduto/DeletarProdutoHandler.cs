@@ -20,6 +20,6 @@ public class DeletarProdutoHandler(IProdutoRepository produtoRepository) : IRequ
 
         _produtoRepository.Remover(produto);
         await _produtoRepository.UnitOfWork.Commit(cancellationToken);
-        return new DeletarProdutoOutput();
+        return outputModel;
     }
 }

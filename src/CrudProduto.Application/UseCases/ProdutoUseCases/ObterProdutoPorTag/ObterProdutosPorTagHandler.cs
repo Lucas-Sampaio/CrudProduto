@@ -17,17 +17,14 @@ public class ObterProdutosPorTagHandler(IProdutoRepository produtoRepository) : 
             return outputModel;
         }
         var produtos = await _produtoRepository.ObterPorTagAsync(request.Tag, cancellationToken);
-
-        return new ObterProdutosPorTagOutput
+        outputModel.Produtos = produtos.ConvertAll(x => new Shared.ProdutoResponse
         {
-            Produtos = produtos.ConvertAll(x => new Shared.ProdutoResponse
-            {
-                Codigo = x.Codigo,
-                Descricao = x.Descricao,
-                Nome = x.Nome,
-                Valor = x.Valor,
-                Tag = x.Tag?.Descricao
-            }),
-        };
+            Codigo = x.Codigo,
+            Descricao = x.Descricao,
+            Nome = x.Nome,
+            Valor = x.Valor,
+            Tag = x.Tag?.Descricao
+        });
+        return outputModel;
     }
 }

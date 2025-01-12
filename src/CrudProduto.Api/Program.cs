@@ -1,8 +1,6 @@
 using CrudProduto.Api.Configuration;
-using CrudProduto.Application.UseCases.ProdutoUseCases.AdicionarProduto;
+using CrudProduto.Api.Filters;
 using CrudProduto.Infra;
-using FluentValidation;
-using FluentValidation.AspNetCore;
 using System.Reflection;
 
 namespace CrudProduto.Api;
@@ -15,9 +13,11 @@ public static class Program
 
         // Add services to the container.
 
-        builder.Services.AddControllers();
-        builder.Services.AddFluentValidationAutoValidation();
-        builder.Services.AddValidatorsFromAssembly(typeof(AdicionarProdutoValidation).Assembly);
+        builder.Services.AddControllers(options =>
+        {
+            options.Filters.Add(typeof(HttpGlobalExceptionFilter));
+        });
+
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerConfiguration();
