@@ -7,6 +7,8 @@ on:
   pull_request:
     branches:
       - master
+  workflow_dispatch:
+  
 
 jobs:
   build:
@@ -20,6 +22,14 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: 8.0.x
+
+      - name: 💾 Cache do NuGet
+        uses: actions/cache@v4
+        with:
+          path: ~/.nuget/packages
+          key: nuget-${{ runner.os }}-${{ hashFiles('**/packages.lock.json', '**/*.csproj') }}
+          restore-keys: |
+            nuget-${{ runner.os }}-
 
       - name: 📦 Restaurar pacotes
         run: dotnet restore
