@@ -1,29 +1,31 @@
-name: Build Project
+name: CI - Build & Test .NET 8
 
 on:
   push:
     branches:
-     - main
+      - main
   pull_request:
-    branches: 
-     - main
+    branches:
+      - main
 
-jobs: 
-    build:
-        runs-on: ubuntu-latest
-        name: Build Project
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-        steps:
-            - name: Checkout code
-              uses: actions/checkout@v4
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v4
 
-            - name: Set up .Net Core
-              uses: actions/setup-dotnet@v4
-              with:
-                dotnet-version: 8.0.x
+      - name: 🏗️ Configurar .NET 8
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: 8.0.x
 
-            - name: 📦 Restaurar pacotes
-              run: dotnet restore
+      - name: 📦 Restaurar pacotes
+        run: dotnet restore
 
-            - name: 🏗️ Compilar aplicação
-              run: dotnet build --configuration Release --no-restore
+      - name: 🏗️ Compilar aplicação
+        run: dotnet build --configuration Release --no-restore
+
+      - name: ✅ Rodar testes
+        run: dotnet test --configuration Release --no-build --logger trx
