@@ -1,5 +1,4 @@
-﻿using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
-using Microsoft.OpenApi.Models;
+﻿using Microsoft.OpenApi.Models;
 using System.Reflection;
 
 namespace CrudProduto.Api.Configuration;
@@ -23,7 +22,6 @@ public static class SwaggerConfig
             var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
             c.IncludeXmlComments(xmlPath);
         });
-        services.AddFluentValidationRulesToSwagger();
     }
 
     public static void UseSwaggerConfiguration(this IApplicationBuilder app)
