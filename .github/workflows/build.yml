@@ -3,10 +3,10 @@ name: CI - Build & Test .NET 8
 on:
   push:
     branches:
-      - main
+      - master
   pull_request:
     branches:
-      - main
+      - master
 
 jobs:
   build:
