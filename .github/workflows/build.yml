@@ -8,7 +8,10 @@ on:
     branches:
       - master
   workflow_dispatch:
-  
+ 
+permissions:
+  contents: write  # ⬅️ Isso permite criar tags no repositório
+
 jobs:
   versionamento: 
     runs-on: ubuntu-latest
