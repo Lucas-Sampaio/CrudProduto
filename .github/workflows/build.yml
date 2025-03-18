@@ -32,12 +32,6 @@ jobs:
             git tag ${{ steps.versioning.outputs.version }} -m "Release ${{ steps.versioning.outputs.version }}"
             git push origin v${{ steps.versioning.outputs.version }}
 
-      - name: 📤 Push de versão
-        env:          
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |           
-            echo "::notice:: ${{ steps.versionamento.outputs.version }}"
-            git config --global user.email 
   build:
     runs-on: ubuntu-latest
 
