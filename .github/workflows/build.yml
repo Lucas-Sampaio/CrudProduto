@@ -11,6 +11,33 @@ on:
   
 
 jobs:
+  versionamento: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v4
+        with:
+         ref: ${{ github.head_ref }}
+         fetch-depth: 0
+
+      - uses: codacy/git-version@2.8.0
+        id: versioning
+        with:
+          release-branch: master
+          prefix: v
+
+      - name: 🏷️ Criar tag no GitHub
+        if: github.ref == 'refs/heads/main'
+        run: |
+            git tag ${{ steps.versioning.outputs.version }} -m "Release ${{ steps.versioning.outputs.version }}"
+            git push origin v${{ steps.versioning.outputs.version }}
+
+      - name: 📤 Push de versão
+        env:          
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |           
+            echo "::notice:: ${{ steps.versionamento.outputs.version }}"
+            git config --global user.email 
   build:
     runs-on: ubuntu-latest
 
@@ -38,4 +65,9 @@ jobs:
         run: dotnet build --configuration Release --no-restore
 
       - name: ✅ Rodar testes
-        run: dotnet test --configuration Release --no-build --logger trx
+        run: dotnet test --configuration Release --no-build --logger trx --results-directory test-results
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: test-results  
+          
