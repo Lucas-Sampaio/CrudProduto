@@ -86,6 +86,5 @@ jobs:
         - name: 📥 dependency review
           uses: actions/dependency-review-action@v4
           with:
-            comment-summary-in-pr: always
-            base-ref: main
-            head-ref: main
+            fail-on-severity: high
+            comment-summary-in-pr: true
