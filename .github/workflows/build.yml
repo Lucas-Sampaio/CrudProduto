@@ -88,3 +88,5 @@ jobs:
           with:
             fail-on-severity: high
             comment-summary-in-pr: true
+            base-ref: master
+            head-ref: master
