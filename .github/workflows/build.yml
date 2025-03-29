@@ -119,7 +119,8 @@ jobs:
 
       - uses: actions/download-artifact@v4
         with:
-          path: app
+          name: app-published
+          path: ./publish
           merge-multiple: false
 
       - name: 🔍 Autenticar no Docker Hub
@@ -129,7 +130,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: 🏗️ Build Docker
-        run: docker build -t lucas29/crud-produto-app:${{ env.version }} .
+        run: docker build -t lucas29/crud-produto-app:${{ env.version }} -f Dockerfile ./publish
       
       - name: Tag Docker image as latest
         run: | 
