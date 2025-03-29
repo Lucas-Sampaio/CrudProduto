@@ -130,7 +130,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: 🏗️ Build Docker
-        run: docker build -t lucas29/crud-produto-app:${{ env.version }} -f Dockerfile ./publish
+        run: docker build -t lucas29/crud-produto-app:${{ env.version }} .
       
       - name: Tag Docker image as latest
         run: | 
