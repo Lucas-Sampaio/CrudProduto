@@ -78,7 +78,7 @@ jobs:
         run: dotnet test --configuration Release --no-build --logger trx --results-directory test-results
 
       - name: 📦 Publicar aplicação
-        run: dotnet publish -c Release --no-restore --no-build --configuration Release -o ./publish
+        run: dotnet publish -c Release --no-restore --no-build  -o ./publish
 
       - name: 📂 Upload dos arquivos publicados
         uses: actions/upload-artifact@v4
