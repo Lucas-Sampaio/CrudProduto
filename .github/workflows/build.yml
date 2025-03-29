@@ -117,7 +117,8 @@ jobs:
       - name: 📥 Checkout do código
         uses: actions/checkout@v4
 
-      - uses: actions/download-artifact@v4
+      - name: 📥 Baixar arquivos publicados
+        uses: actions/download-artifact@v4
         with:
           name: app-published
           path: ./publish
@@ -130,14 +131,14 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: 🏗️ Build Docker
-        run: docker build -t lucas29/crud-produto-app:${{ env.version }} .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/crud-produto-app:${{ env.version }} -f ./publish/Dockerfile ./publish
       
       - name: Tag Docker image as latest
         run: | 
-            docker tag -t lucas29/crud-produto-app:${{ env.version }} crud-produto-app:latest
+            docker tag ${{ secrets.DOCKER_USERNAME }}/crud-produto-app:${{ env.version }} ${{ secrets.DOCKER_USERNAME }}/crud-produto-app:latest
         if: github.ref == 'refs/heads/master'
 
       - name: Docker Push
         run: | 
-            docker push --all-tags  lucas29/crud-produto-app
+            docker push --all-tags  ${{ secrets.DOCKER_USERNAME }}/crud-produto-app
       
