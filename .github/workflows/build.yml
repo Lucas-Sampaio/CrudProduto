@@ -81,7 +81,7 @@ jobs:
         run: dotnet publish -c Release --no-restore --no-build  -o ./publish
 
       - name: 📝 Copiar Dockerfile para publicação
-        run: cp ./CrudProduto.Api/Dockerfile ./publish/
+        run: cp ./src/CrudProduto.Api/Dockerfile ./publish/
 
       - name: 📂 Upload dos arquivos publicados
         uses: actions/upload-artifact@v4
