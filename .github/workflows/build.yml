@@ -19,6 +19,10 @@ permissions:
 jobs:
   versionamento: 
     runs-on: ubuntu-latest
+
+    outputs: 
+      version: ${{ steps.versioning.outputs.version }}
+  
     steps:
       - name: 📥 Checkout do código
         uses: actions/checkout@v4
@@ -72,6 +76,18 @@ jobs:
 
       - name: ✅ Rodar testes
         run: dotnet test --configuration Release --no-build --logger trx --results-directory test-results
+
+      - name: 📦 Publicar aplicação
+        run: dotnet publish -c Release --no-restore --no-build  -o ./publish
+
+      - name: 📝 Copiar Dockerfile para publicação
+        run: cp ./src/CrudProduto.Api/Dockerfile ./publish/
+
+      - name: 📂 Upload dos arquivos publicados
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-published
+          path: ./publish
         
   dependency-check:
      needs: versionamento
@@ -90,3 +106,39 @@ jobs:
             comment-summary-in-pr: true
             base-ref: master
             head-ref: master
+
+  build-docker-image:
+    needs: [versionamento, build]
+    runs-on: ubuntu-latest
+    env:
+        version: ${{ needs.versionamento.outputs.version }}
+    steps:
+
+      - name: 📥 Checkout do código
+        uses: actions/checkout@v4
+
+      - name: 📥 Baixar arquivos publicados
+        uses: actions/download-artifact@v4
+        with:
+          name: app-published
+          path: ./publish
+          merge-multiple: false
+
+      - name: 🔍 Autenticar no Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: 🏗️ Build Docker
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/crud-produto-app:${{ env.version }} -f ./publish/Dockerfile ./publish
+      
+      - name: Tag Docker image as latest
+        run: | 
+            docker tag ${{ secrets.DOCKER_USERNAME }}/crud-produto-app:${{ env.version }} ${{ secrets.DOCKER_USERNAME }}/crud-produto-app:latest
+        if: github.ref == 'refs/heads/master'
+
+      - name: Docker Push
+        run: | 
+            docker push --all-tags  ${{ secrets.DOCKER_USERNAME }}/crud-produto-app
+      
